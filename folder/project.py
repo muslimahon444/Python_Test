@@ -5,5 +5,5 @@
 
 from deep_translator import GoogleTranslator
 t = input('Введите текст ')
-tr = GoogleTranslator(source='en', target='ru').translate(t)
+tr = GoogleTranslator(source='ru', target='en').translate(t)
 print('перевод',tr)
