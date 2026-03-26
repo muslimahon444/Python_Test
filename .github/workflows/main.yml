@@ -12,7 +12,7 @@ jobs:
 
       - name: Created Artifact (Zip)
         run: |
-          zip -r project-v1.zip main.py 
+          zip -r project-v1.zip main.py project.py test_logic.py
 
       - name: Create Release 
         uses: Softprops/action-gh-release@v1
