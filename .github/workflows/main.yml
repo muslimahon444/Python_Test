@@ -1,43 +1,25 @@
-name: Python Project CI/CD
-
+name: Build and Release
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-  workflow_dispatch: # Позволит запускать вручную для тестов
-
+    tags:
+     - 'v*'
 jobs:
-  test-and-log-check:
-    runs-on: ubuntu-latest
-
+  build-and-deploy:
+    runs-on: ubnutu-latest
     steps:
-      - name: Копирование кода
-        uses: actions/checkout@v4
+      - name: Обновление Кода (Zip)
+        uses: actions/checkout@v3
 
-      - name: Установка Python
-        uses: actions/setup-python@v5
+      - name: Created Artifact (Zip)
+        run: |
+          zip -r project-v1.zip main.py 
+
+      - name: Create Release 
+        uses: Softprops/action-gh-release@v1
+
         with:
-          python-version: '3.9'
+          files: project-v.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Установка зависимостей
-        run: |
-          python -m pip install --upgrade pip
-          # Если есть requirements.txt, раскомментируйте строку ниже:
-          # pip install -r requirements.txt
 
-      - name: Запуск тестов
-        working-directory: ./folder
-        run: |
-          python test_logic.py
-
-      - name: Проверка работы программы (Dry run)
-        working-directory: ./folder
-        run: |
-          echo "25" | python main.py
-          if [ -f app.log ]; then 
-            echo "Лог-файл создан!"
-          else 
-            echo "Ошибка: Лог-файл не найден"
-            exit 1
-          fi
